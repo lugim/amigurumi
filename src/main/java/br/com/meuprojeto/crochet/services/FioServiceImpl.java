@@ -20,8 +20,8 @@ public class FioServiceImpl implements FioService{
 	@Override
 	public List<Fio> listaFios(TipoFio tipoFio, TipoCor tipoCor) {
 		
-		List<Fio> fios = new ArrayList<Fio>();
-		
+		List<Fio> fios;
+		//TODO padrão de projeto?
 		if(tipoFio != null) {
 			
 			if(tipoCor != null) {

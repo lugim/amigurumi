@@ -3,13 +3,15 @@ package br.com.meuprojeto.crochet.services;
 import java.io.File;
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileUploadService {
 
-	private String path = "D:\\amigurumi\\test\\";
+	@Value("${file.path}")
+	private String path;
 
 	public String upload(MultipartFile file) { // TODO passar receitaId para nomear a pasta? ainda assim pode sobrepor o
 												// arquivo.
@@ -33,7 +35,7 @@ public class FileUploadService {
 			file.transferTo(new File(path + nomeArquivo));
 
 		} catch (IOException e) {
-
+			//TODO tratar exceção
 		}
 
 		return (path + nomeArquivo);

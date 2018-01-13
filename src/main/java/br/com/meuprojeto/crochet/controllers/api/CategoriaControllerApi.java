@@ -44,7 +44,7 @@ public class CategoriaControllerApi {
 
 		List<Categoria> categorias = categoriaServico.listaTodos();
 
-		CollectionResponse<Categoria> listaCategorias = new CollectionResponse<Categoria>();
+		CollectionResponse<Categoria> listaCategorias = new CollectionResponse<>();
 		listaCategorias.setResult(categorias);
 
 		return ResponseEntity.ok().body(listaCategorias);
@@ -56,7 +56,7 @@ public class CategoriaControllerApi {
 		
 		List<Categoria> categoriasFilhas = categoriaServico.listaFilhas(parentId);
 		
-		CollectionResponse<Categoria> listaCategoriasFilhas = new CollectionResponse<Categoria>();
+		CollectionResponse<Categoria> listaCategoriasFilhas = new CollectionResponse<>();
 		listaCategoriasFilhas.setResult(categoriasFilhas);
 		
 		return ResponseEntity.ok().body(listaCategoriasFilhas);
@@ -70,7 +70,7 @@ public class CategoriaControllerApi {
 		
 		List<Categoria> categorias = categoriaServico.listarPaiAndFilhas(parentId);
 		
-		CollectionResponse<Categoria> listaCategorias = new CollectionResponse<Categoria>();
+		CollectionResponse<Categoria> listaCategorias = new CollectionResponse<>();
 		listaCategorias.setResult(categorias);
 		
 		return ResponseEntity.ok().body(listaCategorias);

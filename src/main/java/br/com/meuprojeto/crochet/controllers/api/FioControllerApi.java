@@ -28,7 +28,7 @@ public class FioControllerApi {
 	@RequestMapping(value = "/fios", method = RequestMethod.GET)
 	public ResponseEntity<CollectionResponse<Fio>> listarFios(@RequestParam(required=false) TipoFio tipoFio, @RequestParam(required=false) TipoCor tipoCor) {
 		List<Fio> fios = fioService.listaFios(tipoFio, tipoCor);
-		CollectionResponse<Fio> listaFios = new CollectionResponse<Fio>();
+		CollectionResponse<Fio> listaFios = new CollectionResponse<>();
 		listaFios.setResult(fios);
 		
 		return ResponseEntity.ok().body(listaFios);
@@ -42,7 +42,7 @@ public class FioControllerApi {
 		try {
 			fioService.adicionar(fio);
 			response.setStatus(HttpServletResponse.SC_CREATED);
-		} catch (Exception e) { //TODO mover tratamento de esxceção 
+		} catch (Exception e) { //TODO mover tratamento de exceção
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -50,7 +50,6 @@ public class FioControllerApi {
 
 	@RequestMapping(value = "/fios/{fioId}", method = RequestMethod.GET)  //TODO - retornar collection msm so retornando 1??
 	public Fio buscarFioPorId(@PathVariable Integer fioId, HttpServletResponse response) {
-		System.out.println("id: " + fioId);
 
 		if (fioId == null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);// "Id não informado ou mal formatado"

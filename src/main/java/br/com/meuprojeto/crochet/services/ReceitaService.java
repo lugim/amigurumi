@@ -1,15 +1,12 @@
 package br.com.meuprojeto.crochet.services;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.List;
-
+import br.com.meuprojeto.crochet.models.Receita;
+import br.com.meuprojeto.crochet.repositories.ReceitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.meuprojeto.crochet.models.Receita;
-import br.com.meuprojeto.crochet.repositories.ReceitaRepository;
+import java.io.File;
+import java.util.List;
 
 @Service
 public class ReceitaService {
@@ -20,19 +17,15 @@ public class ReceitaService {
 	@Autowired
 	private CategoriaService categoriaService;
 
-	public List<Receita> listarTodos() throws FileNotFoundException, IOException {
+	public List<Receita> listarTodos() {
 
-		List<Receita> receitas = receitaRepository.findAll();
-
-		return receitas;
+		return receitaRepository.findAll();
 
 	}
 
 	public Receita buscarPorId(Integer receitaId) {
-
-		Receita receita = receitaRepository.findOne(receitaId);
 		
-		return receita;
+		return receitaRepository.findOne(receitaId);
 	}
 
 	public void adicionar(Receita receita, String pathArquivo) {
@@ -51,7 +44,7 @@ public class ReceitaService {
 
 		Receita receita = receitaRepository.findOne(receitaId);
 
-		if (receita.getAtivo() == true) {
+		if (receita.getAtivo()) {
 			receita.setAtivo(false);
 			receitaRepository.save(receita);
 		}
@@ -59,10 +52,8 @@ public class ReceitaService {
 	}
 
 	public List<Receita> receitaPorCategoria(Integer categoriaId) {
-
-		List<Receita> receitas = receitaRepository.getReceitaByCategoria(categoriaService.buscarPorId(categoriaId));
 		
-		return receitas;
+		return receitaRepository.getReceitaByCategoria(categoriaService.buscarPorId(categoriaId));
 
 	}
 
@@ -70,9 +61,7 @@ public class ReceitaService {
 
 		Receita receita = receitaRepository.findOne(receitaId);
 
-		File arquivo = new File(receita.getPathReceita());
-
-		return arquivo;
+		return new File(receita.getPathReceita());
 
 	}
 

@@ -23,9 +23,9 @@ public class Categoria {
 	private Categoria categoriaPai;
 
 	
-	public Categoria(String nome, Categoria categoria_pai) {
+	public Categoria(String nome, Categoria categoriaPai) {
 		this.nome = nome;
-		this.categoriaPai = categoria_pai;
+		this.categoriaPai = categoriaPai;
 	}
 	
 	public Categoria(String nome) {
@@ -33,34 +33,38 @@ public class Categoria {
 	}
 	
 	public Categoria () {}
-	
-	
-	public Integer getCategoria_id() {
+
+	public Integer getCategoriaId() {
 		return categoriaId;
 	}
-	public void setCategoria_id(Integer categoria_id) {
-		this.categoriaId = categoria_id;
+
+	public void setCategoriaId(Integer categoriaId) {
+		this.categoriaId = categoriaId;
 	}
+
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Categoria getCategoria_pai() {
+
+	public Categoria getCategoriaPai() {
 		return categoriaPai;
 	}
-	public void setCategoria_pai(Categoria categoria_pai) {
-		this.categoriaPai = categoria_pai;
+
+	public void setCategoriaPai(Categoria categoriaPai) {
+		this.categoriaPai = categoriaPai;
 	}
-	
+
 	@Override
 	public String toString() {
 		
 		String retorno = "Categoria: "+this.getNome();
 		
-		if(this.getCategoria_pai() != null) {
-			retorno += "Categoria Pai: "+ this.getCategoria_pai().getNome();
+		if(this.getCategoriaPai() != null) {
+			retorno += "Categoria Pai: "+ this.getCategoriaPai().getNome();
 		}
 		
 		return retorno;

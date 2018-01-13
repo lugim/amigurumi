@@ -1,34 +1,26 @@
 package br.com.meuprojeto.crochet.controllers.api;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import br.com.meuprojeto.crochet.controllers.CollectionResponse;
 import br.com.meuprojeto.crochet.models.Receita;
 import br.com.meuprojeto.crochet.resources.request.ReceitaUploadRequest;
 import br.com.meuprojeto.crochet.resources.response.ReceitaResponse;
 import br.com.meuprojeto.crochet.services.FileUploadService;
 import br.com.meuprojeto.crochet.services.ReceitaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ReceitaControllerApi {
@@ -41,8 +33,10 @@ public class ReceitaControllerApi {
 
 	private static final String CONTROLLER_REQUEST_PATH = "/receitas";
 
+	private static final String DOWNLOAD_PATH = "download/{receitaId}";
+
 	@RequestMapping(value = CONTROLLER_REQUEST_PATH, method = RequestMethod.GET)
-	public ResponseEntity<CollectionResponse<ReceitaResponse>> listarTodos(UriComponentsBuilder builder) throws FileNotFoundException, IOException {
+	public ResponseEntity<CollectionResponse<ReceitaResponse>> listarTodos(UriComponentsBuilder builder) throws IOException {
 		
 		CollectionResponse<ReceitaResponse> receitaResponse = new CollectionResponse<>();
 
@@ -51,7 +45,8 @@ public class ReceitaControllerApi {
 		List<ReceitaResponse> listaReceitaResponse = new ArrayList<>();
 			
 		for (Receita receita : receitas) {
-						ReceitaResponse response = new ReceitaResponse();
+			
+			ReceitaResponse response = new ReceitaResponse();
 			
 			response.setAlturaProdutoFinal(receita.getAlturaProdutoFinal());
 			response.setAtivo(receita.getAtivo());
@@ -63,7 +58,7 @@ public class ReceitaControllerApi {
 			response.setObservacao(receita.getObservacao());
 
 			UriComponentsBuilder uriComponentsBuilder = builder.cloneBuilder();
-			response.setLink(uriComponentsBuilder.path(CONTROLLER_REQUEST_PATH.concat("download/{receitaId}")).buildAndExpand(receita.getReceitaId()).toString());
+			response.setLink(uriComponentsBuilder.path(CONTROLLER_REQUEST_PATH.concat(DOWNLOAD_PATH)).buildAndExpand(receita.getReceitaId()).toString());
 		
 			listaReceitaResponse.add(response);
 		}
@@ -87,10 +82,10 @@ public class ReceitaControllerApi {
 			response.setLarguraProdutoFinal(receita.getLarguraProdutoFinal());
 			response.setNivelDificuldade(receita.getDificuldade().name());
 			response.setReceitaNome(receita.getNome());
-			response.setObservacao(receita.getObservacao());;
+			response.setObservacao(receita.getObservacao());
 
 			UriComponentsBuilder uriComponentsBuilder = builder.cloneBuilder();
-			response.setLink(uriComponentsBuilder.path(CONTROLLER_REQUEST_PATH.concat("download/{receitaId}")).buildAndExpand(receita.getReceitaId()).toString());
+			response.setLink(uriComponentsBuilder.path(CONTROLLER_REQUEST_PATH.concat(DOWNLOAD_PATH)).buildAndExpand(receita.getReceitaId()).toString());
 		
 		return ResponseEntity.ok().body(response);
 	}
@@ -151,7 +146,7 @@ public class ReceitaControllerApi {
 		
 		List<Receita> receitas =  receitaService.receitaPorCategoria(categoriaId);
 		
-		List<ReceitaResponse> receitaResponseList = new ArrayList<ReceitaResponse>();
+		List<ReceitaResponse> receitaResponseList = new ArrayList<>();
 
 		for (Receita receita : receitas) {
 					
@@ -167,7 +162,7 @@ public class ReceitaControllerApi {
 			response.setObservacao(receita.getObservacao());
 
 			UriComponentsBuilder uriComponentsBuilder = builder.cloneBuilder();
-			response.setLink(uriComponentsBuilder.path(CONTROLLER_REQUEST_PATH.concat("download/{receitaId}")).buildAndExpand(receita.getReceitaId()).toString());
+			response.setLink(uriComponentsBuilder.path(CONTROLLER_REQUEST_PATH.concat(DOWNLOAD_PATH)).buildAndExpand(receita.getReceitaId()).toString());
 		
 			receitaResponseList.add(response);
 		}		
@@ -182,18 +177,24 @@ public class ReceitaControllerApi {
 
 		response.setContentType("application/pdf");
 
+		OutputStream outputStream = null;
+
 		File pdf = receitaService.downloadReceita(receitaId);
-		response.addHeader("Content-Disposition", "attachment; filename=" + pdf.getName());
-		response.setContentLength((int) pdf.length());
 
-		FileInputStream inputStream = new FileInputStream(pdf);
-		OutputStream outputStream = response.getOutputStream();
+		try (FileInputStream inputStream = new FileInputStream(pdf)){
 
-		Integer bytes;
-		while ((bytes = inputStream.read()) != -1) {
-			outputStream.write(bytes);
+			response.addHeader("Content-Disposition", "attachment; filename=" + pdf.getName());
+			response.setContentLength((int) pdf.length());
+			outputStream = response.getOutputStream();
+
+			Integer bytes;
+			while ((bytes = inputStream.read()) != -1) {
+				outputStream.write(bytes);
+			}
+
+		}catch (Exception e){
+			//TODO tratar exceção
 		}
-		inputStream.close();
-		outputStream.close();
+
 	}
 }
