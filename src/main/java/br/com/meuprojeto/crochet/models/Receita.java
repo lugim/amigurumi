@@ -79,11 +79,11 @@ public class Receita {
 		this.categoria = categoria;
 	}
 
-//	public List<ReceitaConsumoFio> getReceitaConsumoFio() {
+//	public List<ReceitaConsumoFioServiceImpl> getReceitaConsumoFio() {
 //		return receitaconsumoFio;
 //	}
 //
-//	public void setReceitaConsumoFio(List<ReceitaConsumoFio> receitaConsumoFio) {
+//	public void setReceitaConsumoFio(List<ReceitaConsumoFioServiceImpl> receitaConsumoFio) {
 //		this.receitaconsumoFio = receitaConsumoFio;
 //	}
 

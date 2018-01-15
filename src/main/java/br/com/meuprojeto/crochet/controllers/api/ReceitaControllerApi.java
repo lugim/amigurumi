@@ -4,8 +4,8 @@ import br.com.meuprojeto.crochet.controllers.CollectionResponse;
 import br.com.meuprojeto.crochet.models.Receita;
 import br.com.meuprojeto.crochet.resources.request.ReceitaUploadRequest;
 import br.com.meuprojeto.crochet.resources.response.ReceitaResponse;
-import br.com.meuprojeto.crochet.services.FileUploadService;
-import br.com.meuprojeto.crochet.services.ReceitaService;
+import br.com.meuprojeto.crochet.services.FileUploadServiceImpl;
+import br.com.meuprojeto.crochet.services.ReceitaServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,21 +26,21 @@ import java.util.List;
 public class ReceitaControllerApi {
 
 	@Autowired
-	private ReceitaService receitaService;
+	private ReceitaServiceImpl receitaServiceImpl;
 
 	@Autowired
-	private FileUploadService fileUpload;
+	private FileUploadServiceImpl fileUpload;
 
 	private static final String CONTROLLER_REQUEST_PATH = "/receitas";
 
 	private static final String DOWNLOAD_PATH = "download/{receitaId}";
 
 	@RequestMapping(value = CONTROLLER_REQUEST_PATH, method = RequestMethod.GET)
-	public ResponseEntity<CollectionResponse<ReceitaResponse>> listarTodos(UriComponentsBuilder builder) throws IOException {
+	public ResponseEntity<CollectionResponse<ReceitaResponse>> listarTodos(UriComponentsBuilder builder){
 		
 		CollectionResponse<ReceitaResponse> receitaResponse = new CollectionResponse<>();
 
-		List<Receita> receitas = receitaService.listarTodos();
+		List<Receita> receitas = receitaServiceImpl.listarTodos();
 		
 		List<ReceitaResponse> listaReceitaResponse = new ArrayList<>();
 			
@@ -71,7 +71,7 @@ public class ReceitaControllerApi {
 	@RequestMapping(value = CONTROLLER_REQUEST_PATH + "/{receitaId}", method = RequestMethod.GET)
 	public ResponseEntity<ReceitaResponse> buscarPorId(@PathVariable Integer receitaId, UriComponentsBuilder builder) {
 
-		Receita receita = receitaService.buscarPorId(receitaId);
+		Receita receita = receitaServiceImpl.buscarPorId(receitaId);
 			
 			ReceitaResponse response = new ReceitaResponse();
 			
@@ -92,8 +92,7 @@ public class ReceitaControllerApi {
 
 	@RequestMapping(value = CONTROLLER_REQUEST_PATH, method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	@ResponseBody
-	public void adicionar(@ModelAttribute ReceitaUploadRequest receitaUploadBean, HttpServletResponse response)
-			throws IOException {
+	public void adicionar(@ModelAttribute ReceitaUploadRequest receitaUploadBean, HttpServletResponse response){
 
 		MultipartFile arquivo = receitaUploadBean.getArquivo();
 		if (!arquivo.isEmpty()) {
@@ -102,7 +101,7 @@ public class ReceitaControllerApi {
 
 				String pathArquivo = fileUpload.upload(arquivo);
 				Receita receita = receitaUploadBean.getReceita();
-				receitaService.adicionar(receita, pathArquivo);
+				receitaServiceImpl.adicionar(receita, pathArquivo);
 				response.setStatus(HttpServletResponse.SC_CREATED);
 
 			} catch (Exception e) {
@@ -119,7 +118,7 @@ public class ReceitaControllerApi {
 	public void editar(@PathVariable Integer receitaId, @RequestBody Receita receita, HttpServletResponse response) {
 
 		try {
-			receitaService.editar(receita);
+			receitaServiceImpl.editar(receita);
 			response.setStatus(HttpServletResponse.SC_CREATED);
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -131,7 +130,7 @@ public class ReceitaControllerApi {
 	public void inativar(@PathVariable Integer receitaId, HttpServletResponse response) {
 
 		try {
-			receitaService.inativar(receitaId);
+			receitaServiceImpl.inativar(receitaId);
 			response.setStatus(HttpServletResponse.SC_OK);
 		} catch (Exception e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -144,7 +143,7 @@ public class ReceitaControllerApi {
 
 		CollectionResponse<ReceitaResponse> receitaResponse = new CollectionResponse<>();
 		
-		List<Receita> receitas =  receitaService.receitaPorCategoria(categoriaId);
+		List<Receita> receitas =  receitaServiceImpl.receitaPorCategoria(categoriaId);
 		
 		List<ReceitaResponse> receitaResponseList = new ArrayList<>();
 
@@ -179,7 +178,7 @@ public class ReceitaControllerApi {
 
 		OutputStream outputStream = null;
 
-		File pdf = receitaService.downloadReceita(receitaId);
+		File pdf = receitaServiceImpl.downloadReceita(receitaId);
 
 		try (FileInputStream inputStream = new FileInputStream(pdf)){
 

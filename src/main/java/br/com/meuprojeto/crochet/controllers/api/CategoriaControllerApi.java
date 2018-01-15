@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import br.com.meuprojeto.crochet.controllers.CollectionResponse;
 import br.com.meuprojeto.crochet.models.Categoria;
-import br.com.meuprojeto.crochet.services.CategoriaService;
+import br.com.meuprojeto.crochet.services.CategoriaServiceImpl;
 
 @Controller
 public class CategoriaControllerApi {
 
 	@Autowired
-	private CategoriaService categoriaServico;
+	private CategoriaServiceImpl categoriaServico;
 
 	@RequestMapping(value = "/categorias", method = RequestMethod.POST)
 	public void adicionar(@RequestBody List<Categoria> categorias, HttpServletResponse response) {
