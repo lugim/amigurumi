@@ -12,10 +12,10 @@ import br.com.meuprojeto.crochet.repositories.CategoriaRepository;
 public class CategoriaServiceImpl implements CategoriaService {
 
 	@Autowired
-	private CategoriaRepository categoriaRepository;
+	protected CategoriaRepository categoriaRepository;
 
 	@Autowired
-	private ReceitaServiceImpl receitaServiceImpl;
+	protected ReceitaServiceImpl receitaServiceImpl;
 
 	@Override
 	public void adicionar(List<Categoria> categorias) {
@@ -34,14 +34,13 @@ public class CategoriaServiceImpl implements CategoriaService {
 
 	@Override
 	public List<Categoria> listaFilhas(Integer parentId) {
-		Categoria pai = this.buscarPorId(parentId);
-		return categoriaRepository.findByCategoriaPai(pai);
+		return categoriaRepository.findByCategoriaPai(parentId);
 	}
 
 	@Override
 	public List<Categoria> listarPaiAndFilhas(Integer parentId) {
 		Categoria pai = this.buscarPorId(parentId);
-		return categoriaRepository.findByCategoriaIdOrCategoriaPai(parentId, pai);
+		return categoriaRepository.findByCategoriaIdOrCategoriaPai(parentId, parentId);
 	}
 
 	@Override
@@ -56,7 +55,8 @@ public class CategoriaServiceImpl implements CategoriaService {
 		if (categoria.getCategoriaPai() != ca.getCategoriaPai()) {
 			categoria.setCategoriaPai(ca.getCategoriaPai());
 		}
-		categoriaRepository.save(categoria);
+		categoriaRepository.saveAndFlush(categoria);
+
 		return null;
 	}
 
@@ -80,8 +80,8 @@ public class CategoriaServiceImpl implements CategoriaService {
 	@Override
 	public void remover(Integer categoriaId) {
 
-		// TODO ver retorno - boolean pra sinalizar que apagou ou faz um exception de que não pode apagar pq tem associação??
-		if ((!this.possuiFilhas(categoriaId)) && (receitaServiceImpl.receitaPorCategoria(categoriaId) == null)) {
+		// TODO ver retorno - faz um exception de que não pode apagar pq tem associação. Avaliar: controller, fazer um find pra garantir q excliuu e retornar no swagger.
+		if ((!this.possuiFilhas(categoriaId)) && (receitaServiceImpl.receitaPorCategoria(categoriaId).size() == 0)) {
 			// se não tem categorias filhas, e nem categorias pai/filhas possuem receitas,
 			// delete.
 			categoriaRepository.delete(categoriaId);
