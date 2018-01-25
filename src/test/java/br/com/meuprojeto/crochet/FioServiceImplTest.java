@@ -310,7 +310,7 @@ public class FioServiceImplTest {
 
 	@Test
 	public void TesteListaFiosComTipoFioInvalido() {
-		//TODO
+		//TODO - testar exceção
 		/**
 		Fio fioFalso1 = new Fio("Círculo", TipoFio.LA, TipoCor.SOLIDA, "Azul", "05486C", 80.0, 40.0);
 		Fio fioFalso2 = new Fio("Cisne", TipoFio.LA, TipoCor.MESCLADA, "Roxa e Branca", "B024M", 80.0, 40.0);

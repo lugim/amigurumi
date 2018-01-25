@@ -34,7 +34,7 @@ public class ReceitaServiceImpl implements ReceitaService{
 	public void adicionar(Receita receita, String pathArquivo) {
 		// TODO somente pdf no arquivo!
 		receita.setPathReceita(pathArquivo);
-		receitaRepository.save(receita);
+		receitaRepository.saveAndFlush(receita);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class ReceitaServiceImpl implements ReceitaService{
 
 	@Override
 	public List<Receita> receitaPorCategoria(Integer categoriaId) {
-		
+		//TODO - pesquisar filhas tb
 		return receitaRepository.getReceitaByCategoria(categoriaServiceImpl.buscarPorId(categoriaId));
 
 	}

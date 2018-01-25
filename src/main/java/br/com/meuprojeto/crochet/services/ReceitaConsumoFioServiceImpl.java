@@ -11,16 +11,7 @@ public class ReceitaConsumoFioServiceImpl {
 	@Autowired
 	private FioServiceImpl fioService;
 	
-	//private ReceitaServiceImpl
-	
-	//fio
-	//receita
-	//pesoconsumido
-	//metragemconsumida
-	//observacao
-	
-	//autowired dentro de receita
-	
+
 	protected void adicionar(Integer receitaId, Integer fioId, Double pesoConsumido, String observacao){
 	
 		Fio fio = fioService.buscarFioPorId(fioId);

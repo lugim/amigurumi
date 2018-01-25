@@ -2,7 +2,9 @@ package br.com.meuprojeto.crochet;
 
 import br.com.meuprojeto.crochet.models.Categoria;
 import br.com.meuprojeto.crochet.repositories.CategoriaRepository;
+import br.com.meuprojeto.crochet.repositories.ReceitaRepository;
 import br.com.meuprojeto.crochet.services.CategoriaServiceImpl;
+import br.com.meuprojeto.crochet.services.ReceitaService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +29,12 @@ public class CategoriaServiceImplTest {
 
     @Mock
     public CategoriaRepository categoriaRepository;
+
+    @InjectMocks
+    public ReceitaService receitaService;
+
+    @Mock
+    public ReceitaRepository receitaRepository;
 
     @Test
     public void TesteAdicionarListaCategorias(){
@@ -204,6 +212,10 @@ public class CategoriaServiceImplTest {
 
         categoriaService.adicionar(Arrays.asList(categoria1,categoria2,categoria3,categoria4,categoria5,categoria6));
         verify(categoriaRepository,times(1)).save(Arrays.asList(categoria1,categoria2,categoria3,categoria4,categoria5,categoria6));
+
+        //criar receitas com a categoria
+
+        //when(receitaRepository.getReceitaByCategoria())
 
         categoriaService.remover(6);
 

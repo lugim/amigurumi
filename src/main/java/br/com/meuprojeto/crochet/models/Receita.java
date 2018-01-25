@@ -41,10 +41,20 @@ public class Receita {
 	@Column(nullable = false, columnDefinition = "BOOLEAN default true", insertable = false)
 	private Boolean ativo;
 
-	
+
+	public Receita(String nome, String autoria, Categoria categoria, NivelDificuldadeReceita nivelDificuldade) {
+		this.nome = nome;
+		this.autoria = autoria;
+		this.categoria = categoria;
+		this.nivelDificuldade = nivelDificuldade;
+	}
 
 	public Integer getReceitaId() {
 		return receitaId;
+	}
+
+	public void setReceitaId(Integer receitaId) {
+		this.receitaId = receitaId;
 	}
 
 	public String getNome() {
@@ -125,6 +135,14 @@ public class Receita {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public NivelDificuldadeReceita getNivelDificuldade() {
+		return nivelDificuldade;
+	}
+
+	public void setNivelDificuldade(NivelDificuldadeReceita nivelDificuldade) {
+		this.nivelDificuldade = nivelDificuldade;
 	}
 
 	@Override
