@@ -1,5 +1,6 @@
 package br.com.meuprojeto.crochet.services;
 
+import br.com.meuprojeto.crochet.models.Categoria;
 import br.com.meuprojeto.crochet.models.Receita;
 import br.com.meuprojeto.crochet.repositories.ReceitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class ReceitaServiceImpl implements ReceitaService{
 
 	@Override
 	public List<Receita> receitaPorCategoria(Integer categoriaId) {
-		//TODO - pesquisar filhas tb
+
 		return receitaRepository.getReceitaByCategoria(categoriaServiceImpl.buscarPorId(categoriaId));
 
 	}

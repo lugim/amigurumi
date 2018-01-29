@@ -5,6 +5,7 @@ import br.com.meuprojeto.crochet.repositories.CategoriaRepository;
 import br.com.meuprojeto.crochet.repositories.ReceitaRepository;
 import br.com.meuprojeto.crochet.services.CategoriaServiceImpl;
 import br.com.meuprojeto.crochet.services.ReceitaService;
+import br.com.meuprojeto.crochet.services.ReceitaServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,8 +31,8 @@ public class CategoriaServiceImplTest {
     @Mock
     public CategoriaRepository categoriaRepository;
 
-    @InjectMocks
-    public ReceitaService receitaService;
+    @Mock
+    public ReceitaServiceImpl receitaService;
 
     @Mock
     public ReceitaRepository receitaRepository;
@@ -204,26 +205,31 @@ public class CategoriaServiceImplTest {
         Categoria categoria3 = new Categoria("Nova categoria 3",null);
         categoria3.setCategoriaId(3);
         Categoria categoria4 = new Categoria("Nova categoria 3-1",categoria3);
-        categoria3.setCategoriaId(4);
+        categoria4.setCategoriaId(4);
         Categoria categoria5 = new Categoria("Categoria 1-2",categoria1);
-        categoria3.setCategoriaId(5);
+        categoria5.setCategoriaId(5);
         Categoria categoria6 = new Categoria("Categoria 1-2-1",categoria5);
-        categoria3.setCategoriaId(6);
+        categoria6.setCategoriaId(6);
 
         categoriaService.adicionar(Arrays.asList(categoria1,categoria2,categoria3,categoria4,categoria5,categoria6));
-        verify(categoriaRepository,times(1)).save(Arrays.asList(categoria1,categoria2,categoria3,categoria4,categoria5,categoria6));
 
-        //criar receitas com a categoria
-
-        //when(receitaRepository.getReceitaByCategoria())
+        when(categoriaRepository.getOne(6)).thenReturn(categoria6);
+        when(receitaRepository.getReceitaByCategoria(categoria6)).thenReturn(Arrays.asList());
+        when(categoriaRepository.findByCategoriaPai(6)).thenReturn(Arrays.asList());
+        when(categoriaRepository.findAll()).thenReturn(Arrays.asList(categoria1, categoria2,categoria3, categoria4,categoria5));
 
         categoriaService.remover(6);
-
-        when(categoriaRepository.findAll()).thenReturn(Arrays.asList(categoria1, categoria2,categoria3, categoria4,categoria5));
+        
         List<Categoria> categoriaList = categoriaService.listaTodos();
         Assert.assertEquals(5,categoriaList.size());
 
+/*
+receitaPorCategoria
+possuiFilhas
+categoria getone
 
+
+ */
 
 
     }

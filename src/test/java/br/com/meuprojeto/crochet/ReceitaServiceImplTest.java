@@ -7,6 +7,7 @@ import br.com.meuprojeto.crochet.models.Receita;
 import br.com.meuprojeto.crochet.repositories.CategoriaRepository;
 import br.com.meuprojeto.crochet.repositories.ReceitaRepository;
 import br.com.meuprojeto.crochet.services.CategoriaService;
+import br.com.meuprojeto.crochet.services.CategoriaServiceImpl;
 import br.com.meuprojeto.crochet.services.ReceitaServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +20,6 @@ import static  org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +34,7 @@ public class ReceitaServiceImplTest {
     private ReceitaRepository receitaRepository;
 
     @Mock
-    private CategoriaService categoriaService;
+    private CategoriaServiceImpl categoriaService;
 
     @Mock
     private CategoriaRepository categoriaRepository;
